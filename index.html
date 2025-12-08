@@ -567,31 +567,21 @@
             return hash.toString();
         }
         
-        function saveTowerDatabase() {
-            const dbText = playerDatabase.map(p => 
-                `Name: ${p.name} | Age: ${p.age} | Password: ${p.password} | HighScore: ${p.highScore} | LastPlayed: ${p.lastPlayed}`
-            ).join('\n');
-            const blob = new Blob([dbText], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'towerdatabase.txt';
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-        
         function updatePlayerDatabase(name, age, password, score) {
-            const existingPlayer = playerDatabase.find(p => p.name.toLowerCase() === name.toLowerCase());
-            if (existingPlayer) {
-                if (score > existingPlayer.highScore) {
-                    existingPlayer.highScore = score;
+            const existingPlayerIndex = playerDatabase.findIndex(p => p.name.toLowerCase() === name.toLowerCase());
+            
+            if (existingPlayerIndex !== -1) {
+                // Update existing player - only update score if higher
+                if (score > playerDatabase[existingPlayerIndex].highScore) {
+                    playerDatabase[existingPlayerIndex].highScore = score;
                 }
-                existingPlayer.lastPlayed = new Date().toISOString();
+                playerDatabase[existingPlayerIndex].lastPlayed = new Date().toISOString();
             } else {
+                // Add new player
                 playerDatabase.push({
                     name: name,
                     age: age,
-                    password: password, // Store hashed password
+                    password: password,
                     highScore: score,
                     lastPlayed: new Date().toISOString()
                 });
@@ -756,15 +746,30 @@
                 kills: gameState.enemiesKilled,
                 date: new Date().toISOString()
             };
-            leaderboard.push(entry);
+            
+            // Check if player already exists in leaderboard
+            const existingEntryIndex = leaderboard.findIndex(e => e.name === entry.name);
+            
+            if (existingEntryIndex !== -1) {
+                // If existing score is lower, replace it with new higher score
+                if (entry.points > leaderboard[existingEntryIndex].points) {
+                    leaderboard[existingEntryIndex] = entry;
+                }
+                // If existing score is higher or equal, keep the existing one
+            } else {
+                // Add new entry if player doesn't exist in leaderboard
+                leaderboard.push(entry);
+            }
+            
+            // Sort by points descending
             leaderboard.sort((a, b) => b.points - a.points);
             leaderboard = leaderboard.slice(0, 10);
             localStorage.setItem('quizDefendsLeaderboard', JSON.stringify(leaderboard));
             
+            // Update player database with highest score
             updatePlayerDatabase(gameState.playerName, gameState.playerAge, simpleHash(gameState.playerPassword), gameState.points);
-            saveTowerDatabase();
 
-            const position = leaderboard.findIndex(e => e.name === entry.name && e.points === entry.points && e.date === entry.date) + 1;
+            const position = leaderboard.findIndex(e => e.name === entry.name) + 1;
             return position;
         }
 
@@ -1579,6 +1584,10 @@
                         gameState.defense.towers = {};
                         gameState.defense.blocks = [];
                         gameState.defense.lasers = [];
+
+                        // Save player data immediately when logged in
+                        updatePlayerDatabase(name, age, simpleHash(password), 0);
+
                         gameState.view = 'menu';
                         render();
                     };
