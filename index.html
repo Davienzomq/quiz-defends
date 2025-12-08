@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -570,7 +569,7 @@
         
         function saveTowerDatabase() {
             const dbText = playerDatabase.map(p => 
-                `Name: ${p.name} | Age: ${p.age} | Password: ${p.password} | HighScore: ${p.highScore} | LastPlayed: ${p.lastPlayed}`
+                `Name:  | Age:  | Password:  | HighScore:  | LastPlayed: `
             ).join('\n');
             const blob = new Blob([dbText], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
@@ -640,7 +639,7 @@
                 { x: p.x, y: p.y + 1 }, { x: p.x, y: p.y - 1 }
             ]).filter(s => s.x >= 0 && s.x < GRID_SIZE && s.y >= 0 && s.y < GRID_SIZE && !PATH.some(p => p.x === s.x && p.y === s.y))
               .reduce((acc, current) => {
-                  const key = `${current.x},${current.y}`;
+                  const key = `,`;
                   if (!acc.find(item => item.key === key)) {
                       acc.push({ x: current.x, y: current.y, key: key });
                   }
@@ -706,7 +705,7 @@
         function showNotification(message, duration = 3000, isError = false) {
             const box = $('notification-box');
             box.textContent = message;
-            box.className = `fixed bottom-4 right-4 p-3 text-white rounded-lg shadow-lg ${isError ? 'bg-red-500' : 'bg-green-500'} transition-opacity duration-300 z-50`;
+            box.className = `fixed bottom-4 right-4 p-3 text-white rounded-lg shadow-lg  'bg-green-500' transition-opacity duration-300 z-50`;
             box.classList.remove('hidden');
             box.style.opacity = '1';
             setTimeout(() => {
@@ -724,7 +723,7 @@
             modalTitle.textContent = title;
             modalMessage.innerHTML = message;
             modalButtons.innerHTML = buttons.map(btn =>
-                `<button onclick="${btn.action}" class="px-4 py-2 ${btn.class} text-white font-semibold rounded-lg transition duration-200 mx-1">${btn.text}</button>`
+                `<button onclick="" class="px-4 py-2  text-white font-semibold rounded-lg transition duration-200 mx-1"></button>`
             ).join('');
 
             modal.classList.remove('hidden');
@@ -792,12 +791,12 @@
 
                 const btn = $('start-wave-btn');
                 if (btn) {
-                    btn.textContent = `🚀 Start Wave ${gameState.currentWave + 1}`;
+                    btn.textContent = `🚀 Start Wave `;
                     btn.disabled = false;
                     btn.classList.remove('opacity-50');
                 }
 
-                showNotification(`🎉 Wave ${gameState.currentWave} complete!`, 3000);
+                showNotification(`🎉 Wave  complete!`, 3000);
                  updateStatsUI();
             }
 
@@ -841,7 +840,7 @@
                 if (!block.move(delta)) {
                     blocksToRemove.push(index);
                     gameState.lives--;
-                    showNotification(`💔 Enemy got through! Lives: ${gameState.lives}`, 1500, true);
+                    showNotification(`💔 Enemy got through! Lives: `, 1500, true);
                     if (gameState.lives <= 0) {
                         clearInterval(gameLoopInterval);
                         const position = saveToLeaderboard();
@@ -850,11 +849,11 @@
                             showModal(
                                 '💀 GAME OVER',
                                 `<div class="text-left">
-                                    <p class="mb-2"><strong>Player:</strong> ${gameState.playerName}</p>
-                                    <p class="mb-2"><strong>Final Score:</strong> ${gameState.points} points</p>
-                                    <p class="mb-2"><strong>Wave Reached:</strong> ${gameState.currentWave}</p>
-                                    <p class="mb-2"><strong>Enemies Killed:</strong> ${gameState.enemiesKilled}</p>
-                                    <p class="mb-4"><strong>Leaderboard Position:</strong> #${position}</p>
+                                    <p class="mb-2"><strong>Player:</strong> </p>
+                                    <p class="mb-2"><strong>Final Score:</strong>  points</p>
+                                    <p class="mb-2"><strong>Wave Reached:</strong> </p>
+                                    <p class="mb-2"><strong>Enemies Killed:</strong> </p>
+                                    <p class="mb-4"><strong>Leaderboard Position:</strong> #</p>
                                 </div>`,
                                 [{ text: '🏠 Back to Menu', action: 'window.resetToMenu()', class: 'bg-indigo-600 hover:bg-indigo-700' }]
                             );
@@ -888,7 +887,7 @@
                 ctx.fillStyle = '#78350f';
                 ctx.fillRect(p.x * CS, p.y * CS, CS, CS);
                 ctx.fillStyle = '#92400e';
-                ctx.font = `${CS * 0.4}px Arial`;
+                ctx.font = `px Arial`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 if (i < PATH.length - 1) {
@@ -904,7 +903,7 @@
             ctx.fillStyle = '#10b981';
             ctx.fillRect(PATH[0].x * CS, PATH[0].y * CS, CS, CS);
             ctx.fillStyle = 'white';
-            ctx.font = `bold ${CS * 0.3}px Arial`;
+            ctx.font = `bold px Arial`;
             ctx.fillText('START', PATH[0].x * CS + CS/2, PATH[0].y * CS + CS/2);
             ctx.fillStyle = '#dc2626';
             ctx.fillRect(PATH[PATH.length - 1].x * CS, PATH[PATH.length - 1].y * CS, CS, CS);
@@ -1120,23 +1119,23 @@
             stats.innerHTML = `
                 <div class="px-3 py-2 bg-gray-800/80 rounded-lg shadow-inner text-center">
                     <p class="text-xs text-gray-400">Lives</p>
-                    <p class="text-lg font-bold">${heartsDisplay}</p>
+                    <p class="text-lg font-bold"></p>
                 </div>
                 <div class="px-3 py-2 bg-gray-800/80 rounded-lg shadow-inner text-center">
                     <p class="text-xs text-gray-400">💰 Coins</p>
-                    <p class="text-lg font-bold text-yellow-400">${gameState.coins}</p>
+                    <p class="text-lg font-bold text-yellow-400"></p>
                 </div>
                 <div class="px-3 py-2 bg-gray-800/80 rounded-lg shadow-inner text-center">
                     <p class="text-xs text-gray-400">⭐ Points</p>
-                    <p class="text-lg font-bold text-purple-400">${gameState.points}</p>
+                    <p class="text-lg font-bold text-purple-400"></p>
                 </div>
                 <div class="px-3 py-2 bg-gray-800/80 rounded-lg shadow-inner text-center">
                     <p class="text-xs text-gray-400">🌊 Wave</p>
-                    <p class="text-lg font-bold text-green-400">${gameState.currentWave + 1}</p>
+                    <p class="text-lg font-bold text-green-400"></p>
                 </div>
                 <div class="px-3 py-2 bg-gray-800/80 rounded-lg shadow-inner text-center">
                     <p class="text-xs text-gray-400">💀 Kills</p>
-                    <p class="text-lg font-bold text-red-400">${gameState.enemiesKilled}</p>
+                    <p class="text-lg font-bold text-red-400"></p>
                 </div>
             `;
         }
@@ -1145,16 +1144,16 @@
             const shop = $('tower-shop');
             if (!shop) return;
             shop.innerHTML = TOWERS.map(tower => `
-                <button onclick="window.selectTower(${tower.id})"
+                <button onclick="window.selectTower()"
                         class="p-1.5 rounded-lg font-bold text-xs transition duration-150
-                                ${selectedTowerType === tower.id ? 'bg-gray-600' : 'bg-gray-700 hover:bg-gray-600'}"
-                        style="border: 2px solid ${tower.color};"
-                        title="${tower.description}">
-                    <div class="text-xs font-semibold mb-0.5" style="color: ${tower.color}">${tower.name}</div>
-                    <div class="text-yellow-400 text-xs">💰 ${tower.cost}</div>
+                                 'bg-gray-700 hover:bg-gray-600'"
+                        style="border: 2px solid ;"
+                        title="">
+                    <div class="text-xs font-semibold mb-0.5" style="color: "></div>
+                    <div class="text-yellow-400 text-xs">💰 </div>
                     <div class="flex justify-between text-xs">
-                        <span class="text-red-400">⚔️ ${tower.damage}</span>
-                        <span class="text-blue-400">📡 ${tower.range}</span>
+                        <span class="text-red-400">⚔️ </span>
+                        <span class="text-blue-400">📡 </span>
                     </div>
                 </button>
             `).join('');
@@ -1170,7 +1169,7 @@
 
         function handleTowerPlacement(event) {
             const { x, y } = getGridCoords(event.clientX, event.clientY);
-            const key = `${x},${y}`;
+            const key = `,`;
 
             if (movingTower) {
                 if (!TOWER_SLOTS.some(s => s.x === x && s.y === y)) {
@@ -1199,17 +1198,17 @@
                 const sellPrice = Math.floor(towerDef.cost / 2);
 
                 showModal(
-                    `🗼 ${towerDef.name}`,
+                    `🗼 `,
                     `<div class="text-left">
-                        <p class="mb-2"><strong>Damage:</strong> ${towerDef.damage}</p>
-                        <p class="mb-2"><strong>Range:</strong> ${towerDef.range}</p>
-                        <p class="mb-2"><strong>Fire Rate:</strong> ${towerDef.fireRate}ms</p>
-                        <p class="mb-3"><strong>Sell Value:</strong> 💰${sellPrice}</p>
+                        <p class="mb-2"><strong>Damage:</strong> </p>
+                        <p class="mb-2"><strong>Range:</strong> </p>
+                        <p class="mb-2"><strong>Fire Rate:</strong> ms</p>
+                        <p class="mb-3"><strong>Sell Value:</strong> 💰</p>
                         <p class="text-sm text-gray-400">What would you like to do?</p>
                     </div>`,
                     [
-                        { text: '💰 Sell', action: `window.sellTower('${key}', ${sellPrice})`, class: 'bg-yellow-600 hover:bg-yellow-700' },
-                        { text: '🔄 Move', action: `window.moveTower('${key}')`, class: 'bg-blue-600 hover:bg-blue-700' },
+                        { text: '💰 Sell', action: `window.sellTower('', )`, class: 'bg-yellow-600 hover:bg-yellow-700' },
+                        { text: '🔄 Move', action: `window.moveTower('')`, class: 'bg-blue-600 hover:bg-blue-700' },
                         { text: '❌ Cancel', action: 'window.hideModal()', class: 'bg-gray-600 hover:bg-gray-700' }
                     ]
                 );
@@ -1223,7 +1222,7 @@
                 return;
             }
             if (gameState.coins < towerDef.cost) {
-                showNotification(`❌ Need ${towerDef.cost} coins. You have ${gameState.coins}.`, 2000, true);
+                showNotification(`❌ Need  coins. You have .`, 2000, true);
                 return;
             }
 
@@ -1231,7 +1230,7 @@
             gameState.defense.towers[key] = { typeId: towerDef.id, lastFired: 0 };
             updateStatsUI();
             drawDefenseScene();
-            showNotification(`✅ ${towerDef.name} placed!`, 1500);
+            showNotification(`✅  placed!`, 1500);
         }
 
         function initDefenseGame() {
@@ -1260,7 +1259,7 @@
                     <div id="tower-shop" class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3 px-2"></div>
                     <div class="flex gap-3 flex-wrap justify-center pb-4">
                         <button id="start-wave-btn" onclick="window.startWave()" class="px-5 py-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 rounded-lg font-bold text-sm shadow-lg transition">
-                            🚀 Start Wave ${gameState.currentWave + 1}
+                            🚀 Start Wave 
                         </button>
                     </div>
                 </div>
@@ -1296,7 +1295,7 @@
                 selectedTowerType = id;
                 movingTower = null;
                 updateShopUI();
-                showNotification(`Selected: ${TOWERS[id].name}`, 1500);
+                showNotification(`Selected: `, 1500);
             };
 
             window.sellTower = (key, sellPrice) => {
@@ -1305,7 +1304,7 @@
                 hideModal();
                 updateStatsUI();
                 drawDefenseScene();
-                showNotification(`✅ Tower sold for ${sellPrice} coins!`, 2000);
+                showNotification(`✅ Tower sold for  coins!`, 2000);
             };
 
             window.moveTower = (key) => {
